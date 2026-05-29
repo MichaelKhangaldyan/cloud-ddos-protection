@@ -1,0 +1,16 @@
+[Unit]
+Description=Smart DDoS Block - one-shot scan and apply
+After=network.target nginx.service
+Wants=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/smart_block/smart_block.py
+User=root
+Group=root
+# Log stdout/stderr to journal in case of failure
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

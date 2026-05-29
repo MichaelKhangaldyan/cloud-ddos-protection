@@ -1,0 +1,15 @@
+[Unit]
+Description=Run Smart DDoS Block every minute
+Requires=smart_block.service
+
+[Timer]
+# First run 30 seconds after system boot
+OnBootSec=30s
+# Then every minute
+OnUnitActiveSec=1min
+AccuracySec=5s
+Unit=smart_block.service
+Persistent=true
+
+[Install]
+WantedBy=timers.target

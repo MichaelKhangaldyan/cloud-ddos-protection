@@ -1,0 +1,21 @@
+# /etc/nginx/sites-available/default
+# Reverse proxy configuration for DDoS protection
+# All incoming traffic from clients goes through this server block,
+# is rate-limited, and then proxied to the internal target server.
+
+server {
+    listen 80;
+
+    location / {
+        # Rate limiting: 1 r/s with burst tolerance of 5
+        limit_req zone=one burst=5 nodelay;
+
+        # Forward to internal backend (vm-target via internal VPC IP)
+        proxy_pass http://10.128.0.2;
+
+        # Pass real client info to backend
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
